@@ -170,3 +170,15 @@ int ImpPrinter::visit(FCallExp* e) {
   cout << ')';
   return 0;
 }
+void ImpPrinter::visit(FCallStm* s){
+  cout << s->fname << "(";
+  list<Exp*>::iterator it;
+  bool first = true;
+  for (it = s->args.begin(); it != s->args.end(); ++it) {
+    if (!first) cout << ",";
+    first = false;
+    (*it)->accept(this);
+  }
+  cout << ')';
+  return;
+}

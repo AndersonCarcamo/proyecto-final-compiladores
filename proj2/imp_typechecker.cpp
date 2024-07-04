@@ -320,3 +320,34 @@ ImpType ImpTypeChecker::visit(FCallExp* e) {
   
   return rtype;
 }
+
+void ImpTypeChecker::visit(FCallStm* s){
+    if(!env.check(s->fname)){
+    cout << "Funcion " << s->fname << " no declarada" << endl;
+    exit(0);
+  }
+
+  ImpType fnameType = env.lookup(s->fname);
+  int fnameParamsSize = fnameType.types.size() - 1;
+
+  if(fnameParamsSize != s->args.size()){
+    cout << "ERROR: Numero de parametros y argumentos diferentes" << endl;
+    exit(0);
+  }
+  
+  list<Exp*>::iterator it;
+  vector<ImpType::TType>::iterator typesIt;
+  for (it = s->args.begin(), typesIt = fnameType.types.begin();
+       it != s->args.end(); ++it, ++typesIt) {
+    ImpType argType = (*it)->accept(this);
+    ImpType paramType;
+    paramType.set_basic_type(*typesIt);
+
+    if(!argType.match(paramType)){
+      cout << "ERROR: Tipo de parametros y argumentos distinto" << endl;
+      exit(0);
+    }
+  }
+
+  return;
+}

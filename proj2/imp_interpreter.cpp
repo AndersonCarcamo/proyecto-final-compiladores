@@ -250,3 +250,42 @@ ImpValue ImpInterpreter::visit(FCallExp* e) {
   }
   return retval;
 }
+void ImpInterpreter::visit(FCallStm* s) {
+  FunDec* fdec = fdecs.lookup(s->fname);
+  env.add_level();
+
+  list<Exp*>::iterator it;
+  list<string>::iterator varit;
+  list<string>::iterator vartype;
+  ImpVType tt;
+  // comparar longitud
+  if (fdec->vars.size() != s->args.size()) {
+    cout << "Error: Numero de parametros incorrecto en llamada a " << fdec->fname << endl;
+    exit(0);
+  }
+  for (it = s->args.begin(), varit = fdec->vars.begin(), vartype = fdec->types.begin();
+       it != s->args.end(); ++it, ++varit, ++vartype) {
+    tt = ImpValue::get_basic_type(*vartype);
+    ImpValue v = (*it)->accept(this);
+    if (v.type != tt) {
+      cout << "Error FCall: Tipos de param y arg no coinciden. Funcion " << fdec->fname << " param " << *varit << endl;
+      exit(0);
+    }
+    env.add_var(*varit, v);
+  }
+  
+  retcall = false;
+  fdec->body->accept(this);
+  if (!retcall) {
+    cout << "Error: Funcion " << s->fname << " no ejecuto RETURN" << endl;
+    exit(0);
+  }
+  retcall = false;
+  env.remove_level();
+  // chequear tipo de retorno.
+  tt = ImpValue::get_basic_type(fdec->rtype);
+  if (tt != retval.type) {
+    cout << "Error: Tipo de retorno incorrecto de funcion " << fdec->fname << endl;
+    exit(0);
+  }
+}
