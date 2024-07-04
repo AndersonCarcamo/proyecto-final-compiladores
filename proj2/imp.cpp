@@ -27,6 +27,7 @@ ParenthExp::ParenthExp(Exp *e):e(e){}
 CondExp::CondExp(Exp *c, Exp* et, Exp* ef):cond(c), etrue(et), efalse(ef){}
 FCallExp::FCallExp(string fname, list<Exp*> args):fname(fname), args(args) {}
 
+//Destructors
 Exp::~Exp() {}
 BinaryExp::~BinaryExp() { delete left; delete right; }
 NumberExp::~NumberExp() { }
@@ -141,6 +142,7 @@ VarDecList::VarDecList():vdlist() {}
 FunDecList::FunDecList():fdlist() {}
 Body::Body(VarDecList* vdl, StatementList* sl):var_decs(vdl), slist(sl) {}
 Program::Program(VarDecList* vdl, FunDecList* fdl):var_decs(vdl), fun_decs(fdl) {}
+FCallStm::FCallStm(string fname, list<Exp*> args) : fname(fname), args(args) {}
 
 Stm::~Stm() {}
 AssignStatement::~AssignStatement() { delete rhs; }
@@ -156,6 +158,7 @@ VarDecList::~VarDecList() { }
 FunDecList::~FunDecList() { }
 Body::~Body() { delete slist; delete var_decs; }
 Program::~Program() { delete fun_decs; delete var_decs; }
+FCallStm::~FCallStm() { while (!args.empty()) { delete args.front();  ; args.pop_front();  } }
 
 void AssignStatement::accept(ImpVisitor* v) {
   return v->visit(this);
@@ -210,6 +213,9 @@ void Body::accept(ImpVisitor* v) {
 void Program::accept(ImpVisitor* v) {
   return v->visit(this);
 }
+void FCallStm::accept(ImpVisitor* v) {
+  return v->visit(this);
+}
 
 // Value visitor
 
@@ -259,6 +265,9 @@ void Body::accept(ImpValueVisitor* v) {
 }
 
 void Program::accept(ImpValueVisitor* v) {
+  return v->visit(this);
+}
+void FCallStm::accept(ImpValueVisitor* v) {
   return v->visit(this);
 }
 
@@ -312,12 +321,6 @@ void Body::accept(TypeVisitor* v) {
 void Program::accept(TypeVisitor* v) {
   return v->visit(this);
 }
-
-
-
-
-
-
-
-
-
+void FCallStm::accept(TypeVisitor* v){
+  return v->visit(this);
+}

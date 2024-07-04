@@ -140,7 +140,7 @@ public:
   IfStatement(Exp* c, Body* tbody, Body *fbody);
   void accept(ImpVisitor* v);
   void accept(ImpValueVisitor* v);
-  void accept(TypeVisitor* v);
+  void accept(TypeVisitor* v); Exp* e;
   ~IfStatement();
 };
 
@@ -165,6 +165,16 @@ public:
   ~ReturnStatement();
 };
 
+class FCallStm : public Stm {
+public:
+  string fname;
+  list<Exp*> args;
+  FCallStm(string fname, list<Exp*> args);
+  void accept(ImpVisitor* v);
+  void accept(ImpValueVisitor* v);
+  void accept(TypeVisitor* v);
+  ~FCallStm();
+};
 
 class StatementList {
 public:

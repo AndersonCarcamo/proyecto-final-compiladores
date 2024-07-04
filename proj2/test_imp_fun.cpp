@@ -8,7 +8,7 @@
 #include "imp_interpreter.hh"
 #include "imp_type.hh"
 #include "imp_typechecker.hh"
-#include "imp_codegen.hh"
+//#include "imp_codegen.hh"
 
 int main(int argc, const char* argv[]) {
 
@@ -41,13 +41,12 @@ int main(int argc, const char* argv[]) {
   interpreter.interpret(program);
   cout << "End of program execution" << endl;
 
-  ImpCodeGen cg(&checker);
-
+  //ImpCodeGen cg(&checker);
   string outfname = argv[1];
   outfname += ".sm";
   cout << endl << "Compiling to: " << outfname << endl;
   
-  cg.codegen(program, outfname);
+  //cg.codegen(program, outfname);
 
   delete program;
 
