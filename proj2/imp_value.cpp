@@ -5,6 +5,7 @@ ImpValue::ImpValue():type(NOTYPE) { }
 ImpVType ImpValue::get_basic_type(string s) {
   ImpVType tt;
   if (s.compare("int")==0) tt = TINT;
+  else if (s.compare("void")==0) tt = TVOID;
   else if (s.compare("bool")==0) tt = TBOOL;
   else tt = NOTYPE; 
   return tt;
@@ -29,6 +30,8 @@ std::ostream& operator << ( std::ostream& outs, const ImpValue & v )
       outs << "true";
     else
       outs << "false";
+  } else if (v.type == TVOID) {
+    outs << "void";
   } else {
     outs << "NOTYPE";
   }

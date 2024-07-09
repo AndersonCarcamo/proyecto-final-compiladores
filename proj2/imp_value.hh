@@ -9,7 +9,7 @@
 using namespace std;
 
 // esto luego tendra su propia clase
-enum ImpVType { NOTYPE=0, TINT, TBOOL }; // value type
+enum ImpVType { NOTYPE=0, TINT, TBOOL, TVOID}; // value type
 
 class ImpValue {
 public:

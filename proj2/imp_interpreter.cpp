@@ -237,7 +237,7 @@ ImpValue ImpInterpreter::visit(FCallExp* e) {
   retcall = false;
   fdec->body->accept(this);
   if (!retcall) {
-    cout << "Error: Funcion " << e->fname << " no ejecuto RETURN" << endl;
+    cout << "Error FCallExp: Funcion " << e->fname << " no ejecuto RETURN" << endl;
     exit(0);
   }
   retcall = false;
@@ -276,15 +276,16 @@ void ImpInterpreter::visit(FCallStm* s) {
   
   retcall = false;
   fdec->body->accept(this);
-  if (!retcall) {
-    cout << "Error: Funcion " << s->fname << " no ejecuto RETURN" << endl;
+  tt = ImpValue::get_basic_type(fdec->rtype);
+  if (!retcall && tt != TVOID) {
+    cout << "Error FCallStm: Funcion " << s->fname << " no ejecuto RETURN" << endl;
     exit(0);
   }
   retcall = false;
   env.remove_level();
   // chequear tipo de retorno.
   tt = ImpValue::get_basic_type(fdec->rtype);
-  if (tt != retval.type) {
+  if (tt != retval.type && tt != TVOID) {
     cout << "Error: Tipo de retorno incorrecto de funcion " << fdec->fname << endl;
     exit(0);
   }
