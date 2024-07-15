@@ -143,6 +143,7 @@ FunDecList::FunDecList():fdlist() {}
 Body::Body(VarDecList* vdl, StatementList* sl):var_decs(vdl), slist(sl) {}
 Program::Program(VarDecList* vdl, FunDecList* fdl):var_decs(vdl), fun_decs(fdl) {}
 FCallStm::FCallStm(string fname, list<Exp*> args) : fname(fname), args(args) {}
+ForDoStatement::ForDoStatement(string id, Exp* start, Exp* end, Body* b):id(id), start(start), end(end), body(b) { }
 
 Stm::~Stm() {}
 AssignStatement::~AssignStatement() { delete rhs; }
@@ -150,6 +151,7 @@ PrintStatement::~PrintStatement() { delete e; }
 IfStatement::~IfStatement() { delete fbody; delete tbody; delete cond; }
 WhileStatement::~WhileStatement() { delete body; delete cond; }
 ReturnStatement::~ReturnStatement() { delete e; }
+ForDoStatement::~ForDoStatement() { delete start; delete end; delete body; }
 
 StatementList::~StatementList() { }
 VarDec::~VarDec() { }
@@ -217,6 +219,10 @@ void FCallStm::accept(ImpVisitor* v) {
   return v->visit(this);
 }
 
+void ForDoStatement::accept(ImpVisitor* v) {
+  return v->visit(this);
+}
+
 // Value visitor
 
 void AssignStatement::accept(ImpValueVisitor* v) {
@@ -271,6 +277,11 @@ void FCallStm::accept(ImpValueVisitor* v) {
   return v->visit(this);
 }
 
+void ForDoStatement::accept(ImpValueVisitor* v) {
+  return v->visit(this);
+}
+
+
 // Type visitor
 
 void AssignStatement::accept(TypeVisitor* v) {
@@ -322,5 +333,8 @@ void Program::accept(TypeVisitor* v) {
   return v->visit(this);
 }
 void FCallStm::accept(TypeVisitor* v){
+  return v->visit(this);
+}
+void ForDoStatement::accept(TypeVisitor* v) {
   return v->visit(this);
 }

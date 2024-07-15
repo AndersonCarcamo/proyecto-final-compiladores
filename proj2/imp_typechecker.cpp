@@ -351,3 +351,24 @@ void ImpTypeChecker::visit(FCallStm* s){
 
   return;
 }
+
+void ImpTypeChecker::visit(ForDoStatement* s) {
+  ImpType type = s->start->accept(this);
+  if (!type.match(inttype)) {
+    cout << "Start type in ForDoStatement must be int" << endl;
+    exit(0);
+  }
+  type = s->end->accept(this);
+  if (!type.match(inttype)) {
+    cout << "End type in ForDoStatement must be int" << endl;
+    exit(0);
+  }
+
+  env.add_var(s->id, inttype);
+
+  int sp_before = sp;
+  s->body->accept(this);
+  sp = sp_before;
+  return;
+
+}

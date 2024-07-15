@@ -250,3 +250,26 @@ ImpValue ImpInterpreter::visit(FCallExp* e) {
   }
   return retval;
 }
+
+void ImpInterpreter::visit(ForDoStatement* s) {
+  ImpValue start = s->start->accept(this);
+  ImpValue end = s->end->accept(this);
+  if (start.type != TINT || end.type != TINT) {
+    cout << "Error: Start and end types in the for must be integers" << endl;
+    exit(0);
+  }
+  env.add_level();
+  env.add_var(s->id, start);
+  ImpValue v;
+  v.set_default_value(TINT);
+  if (start.int_value > end.int_value) {
+    cout << "start > end in for" << endl;
+  }
+  for (int i = start.int_value; i <= end.int_value; i++) {
+    v.int_value = i;
+    env.update(s->id, v);
+    s->body->accept(this);
+  }
+  env.remove_level();
+  return;
+}

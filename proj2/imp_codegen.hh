@@ -35,7 +35,8 @@ public:
   void visit(IfStatement*);
   void visit(WhileStatement*);
   void visit(ReturnStatement*);
-
+  void visit(FCallStm*);
+  void visit(ForDoStatement*);
   
   int visit(BinaryExp* e);
   int visit(NumberExp* e);

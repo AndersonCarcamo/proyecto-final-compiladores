@@ -182,3 +182,14 @@ void ImpPrinter::visit(FCallStm* s){
   cout << ')';
   return;
 }
+
+void ImpPrinter::visit(ForDoStatement* s) {
+  cout << "for " << s->id << " in (";
+  s->start->accept(this);
+  cout << ", ";
+  s->end->accept(this);
+  cout << ") do" << endl;
+  s->body->accept(this);
+  cout << "endfor";
+  return;
+}
